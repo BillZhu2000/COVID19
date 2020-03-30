@@ -12,7 +12,7 @@ import plotly.express as px
 # Read in county data
 def visualize(url='https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'):
     """
-    Visualize COVID19 cases per county over time from NYPost data
+    Visualize COVID19 cases per county over time from NYTimes data
     :param url:
     :return:
     """
