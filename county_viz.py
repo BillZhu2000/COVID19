@@ -25,15 +25,21 @@ def visualize(url='https://raw.githubusercontent.com/nytimes/covid-19-data/maste
     df.to_csv('rsc/' + url.split('/')[-1])
 
     # Load county json coords and plot the graph
+    log_cases = np.log10(df['cases'])
     county_coords = json.load(open('rsc/geojson-counties-fips.json'))
-    fig = px.choropleth(df, geojson=county_coords, locations='fips', color='cases',
+    fig = px.choropleth(df, geojson=county_coords, locations='fips', color=log_cases,
                         color_continuous_scale="sunset",
-                        range_color=(0, 15),
+                        range_color=(0, max(log_cases)),
                         scope="usa",
                         labels={'cases': 'Total cases'},
                         animation_frame="date"
                         )
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    tickvals = list(range(int(max(log_cases)) + 1))
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0},
+                      coloraxis_colorbar=dict(
+                      title='U.S. COVID19 cases by county over time',
+                      tickvals=tickvals,
+                      ticktext=[pow(10, x) for x in tickvals]))
     fig.show()
 
     # TODO Figure out how to save this thing
