@@ -5,7 +5,6 @@ Script to visualize county data growth
 import json
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
 
 
@@ -26,6 +25,7 @@ def visualize(url='https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
     # Load county json coords and plot the graph
     log_cases = np.log10(df['cases'])
+    # diff_cases = np.log10(df['cases'] - df['cases'].shift(1).fillna(0))
     county_coords = json.load(open('rsc/geojson-counties-fips.json'))
     fig = px.choropleth(df, geojson=county_coords, locations='fips', color=log_cases,
                         color_continuous_scale="sunset",
@@ -37,9 +37,9 @@ def visualize(url='https://raw.githubusercontent.com/nytimes/covid-19-data/maste
     tickvals = list(range(int(max(log_cases)) + 1))
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0},
                       coloraxis_colorbar=dict(
-                      title='U.S. COVID19 cases by county over time',
-                      tickvals=tickvals,
-                      ticktext=[pow(10, x) for x in tickvals]))
+                          title='U.S. COVID19 change day by day',
+                          tickvals=tickvals,
+                          ticktext=[pow(10, x) for x in tickvals]))
     fig.show()
 
     # TODO Figure out how to save this thing
