@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 
+from datetime import datetime
+
 
 # Read in county data
 def visualize(url='https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'):
@@ -41,8 +43,7 @@ def visualize(url='https://raw.githubusercontent.com/nytimes/covid-19-data/maste
                           tickvals=tickvals,
                           ticktext=[pow(10, x) for x in tickvals]))
     fig.show()
-
-    # TODO Figure out how to save this thing
+    fig.write_html(datetime.today().strftime('%Y-%m-%d') + '_county_cases.html')
 
 
 def main():
